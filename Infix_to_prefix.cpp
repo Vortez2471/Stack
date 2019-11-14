@@ -19,8 +19,8 @@ int prec(char a)
 
 void in_to_pre(string str)
 {
-	string ans="";
-	stack<char> s;
+	stack<char> ch;
+	string ans;
 	reverse(str.begin(),str.end());
 	for (int i = 0; i < str.size(); i++) 
 	{ 
@@ -38,44 +38,42 @@ void in_to_pre(string str)
     } 
 	for(int i=0;i<str.size();i++)
 	{
-		if((str[i]>='A'&&str[i]<='Z')||(str[i]>='a'&&str[i]<='z'))
+		if(str[i]>='A'&&str[i]<='Z')
 			ans=ans+str[i];
 		else if(str[i]=='(')
-			s.push(str[i]);
+			ch.push(str[i]);
 		else if(str[i]==')')
 		{
-			while(!s.empty()&&s.top()!='(')
+			while(!ch.empty()&&ch.top()!='(')
 			{
-				char c=s.top();
-				s.pop();
-				ans=ans+c;
+				ans=ans+ch.top();
+				ch.pop();
 			}
-			s.pop();
+			ch.pop();
 		}
 		else
 		{
-			if(prec(str[i])<=prec(s.top()))
-			{
-				while(prec(str[i])<=prec(s.top())&&!s.empty())
-				{
-					char c=s.top();
-					s.pop();
-					ans=ans+c;
-				}
-				s.push(str[i]);
-			}
+				if(prec(str[i])<=prec(ch.top()))
+			    {
+					while(!ch.empty()&&prec(str[i])<=prec(ch.top()))
+					{
+						ans=ans+ch.top();
+						ch.pop();
+					}
+			    }
+			    ch.push(str[i]);
 		}
+	
 	}
-	while(!s.empty())
+	while(!ch.empty())
 	{
-		char c=s.top();
-		s.pop();
-		ans=ans+c;
+		ans=ans+ch.top();
+		ch.pop();
 	}
 	reverse(ans.begin(),ans.end());
-	cout<<ans<<endl;
-
+	cout<<ans;
 }
+
 
 
 int main()
